@@ -1,0 +1,5 @@
+{
+  "prefix": "/",
+  "token": "process.env.TOKEN",
+  "channel_id": "805809242111737926"
+}
