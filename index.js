@@ -4,6 +4,17 @@ const {prefix, token, channel_id} = require("./config.json");
 
 const clientDiscord = new Discord.Client();
 
+clientDiscord.on("ready", () => {
+  console.log("Ready")
+  clientDiscord.user.setPresence({
+    status: "online",
+    activity: {
+      name: "/help pour plus d'info",
+      type: "PLAYING"
+    }
+  });
+})
+
 clientDiscord.on('message', message => {
   if (message.channel.id === channel_id) {
     /*if (message.content === prefix + "serveurNom") { //Nom du serveur
@@ -32,24 +43,15 @@ clientDiscord.on('message', message => {
     if (message.content.startsWith(prefix + "vote")) { //Initier un vote
       let args = message.content.split(" ").slice(1);
       let intitule = args.join(" ");
-      let embed = new Discord.RichEmbed()
+      let embed = new Discord.MessageEmbed()
           .addField(intitule, "Répondre avec :white_check_mark: ou :x:")
           .setColor("0xB40404")
           .setTimestamp();
-      clientDiscord.channels.get(channel_id).send(embed) //Crée le vote dans le channel vote
+      message.channel.send(embed) //Crée le vote dans le channel vote
           .then(function (message) {
             message.react('✅');
             message.react('❌');
           });
-    }
-    if(message.content.startsWith(prefix + "clean")){
-      let args = message.content.split(" ").slice(1);
-      let amount = parseInt(args[0])
-      if (isNaN(amount) || amount <= 1 || amount >= 100) {
-        return message.reply("Ce n'est pas un nombre valide, tu dois saisir un nombre compris entre 1 et 99  !");
-      }
-      clientDiscord.channels.get(channel_id).bulkDelete(amount-1);
-      message.delete();
     }
     if (message.content === prefix + "help") {
       message.channel.send("```Commandes du bot :" +
@@ -60,7 +62,6 @@ clientDiscord.on('message', message => {
           "\n - " + prefix + "serveurMembreDeconnecte : Nombre de gens deconnectés sur le serveur" +
           "\n - " + prefix + "photo : Envoie une photo" +*/
           "\n - " + prefix + "vote + intitulité : Propose un vote" +
-          "\n - " + prefix + "clean : Supprime les X derniers messages" +
           "```");
     }
   }
