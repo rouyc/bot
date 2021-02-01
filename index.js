@@ -4,12 +4,6 @@ const {prefix, token, channel_id} = require("./config.json");
 
 const clientDiscord = new Discord.Client();
 
-clientDiscord.login(token);
-
-clientDiscord.once("ready", () => {
-  console.log("Ready!");
-});
-
 clientDiscord.on('message', message => {
   if (message.channel.id === channel_id) {
     /*if (message.content === prefix + "serveurNom") { //Nom du serveur
@@ -71,3 +65,5 @@ clientDiscord.on('message', message => {
     }
   }
 });
+
+clientDiscord.login(token);
