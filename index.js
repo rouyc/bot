@@ -29,7 +29,7 @@ clientDiscord.on('message', message => {
             .addField(intitule, "Répondre avec :white_check_mark: ou :x:")
             .setColor("0xB40404")
             .setTimestamp();
-        clientDiscord.channels.cache.get(channel_id).send(embed) //Crée le vote dans le channel vote
+        clientDiscord.channels.cache.get(channel_id).send(embed)
             .then(function (message) {
               message.react('✅');
               message.react('❌');
