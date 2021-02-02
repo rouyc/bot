@@ -12,7 +12,7 @@ clientDiscord.on("ready", () => {
     status: "online",
     activity: {
       name: "/help pour plus d'info",
-      type: "COMPETING"
+      type: "PLAYING"
     }
   });
 })
