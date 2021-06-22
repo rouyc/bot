@@ -44,7 +44,6 @@ clientDiscord.on('message', message => {
       case ('/help') :
         clientDiscord.channels.cache.get(channel_id).send("```Commandes du bot :" +
             "\n - " + prefix + "help : Affiche toutes les commandes disponibles" +
-            "\n - " + prefix + "euro : Pour faire un pronostic sur un match de l'Euro (Rôle Euro nécessaire)" +
             /*"\n - " + prefix + "serveurNom : Donne le nom du serveur" +
             "\n - " + prefix + "serveurMembre : Nombre de gens sur le serveur" +
             "\n - " + prefix + "serveurMembreConnecte : Nombre de gens connectés sur le serveur" +
@@ -76,6 +75,12 @@ clientDiscord.on('message', message => {
             .then(response => console.log(response))
             .catch(error => console.log(error))
       break;
+      case ('/help') :
+        clientDiscord.channels.cache.get(channel_id).send("```Commandes du bot :" +
+            "\n - " + prefix + "help : Affiche toutes les commandes disponibles" +
+            "\n - " + prefix + "euro : Pour établir un prono sur l'Euro respecter la mise en forme : /euro Equipe1-Equipe2 Equipe1 Victoire" +
+            "```");
+        break;
     }
   }
 });
