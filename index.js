@@ -93,7 +93,6 @@ clientDiscord.on('message', message => {
         axiosRestDBConfig.get('/prono?q={"id_member":' + id_member + '}')
             .then(response =>
                 response.data.forEach(function(match) {
-                  console.log(match);
                   let embed = new Discord.MessageEmbed()
                       .setColor("#0099ff")
                       .setTitle(match.match)
