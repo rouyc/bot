@@ -1,10 +1,17 @@
 const Discord = require('discord.js');
-
-const {prefix, channel_id, startToken, midToken, endToken} = require("./config.json");
-
+const axios = require('axios')
+const {prefix, channel_id,channel_role_id, channel_euro_id, role_euro_id, emoji_euro_id, startToken, midToken, endToken} = require("./config.json");
 const token = startToken + midToken + endToken;
-
 const clientDiscord = new Discord.Client();
+const restDBConfig = {
+  'baseURL': 'https://euro2020-46ed.restdb.io/rest/',
+  'headers': {
+    'Content-Type': 'application/json',
+    'cache-Control': 'no-cache',
+    'x-apikey': '501ae870617104ff948422ba8999c50ea308d',
+  }
+}
+const axiosRestDBConfig = axios.create(restDBConfig)
 
 clientDiscord.on("ready", () => {
   console.log("Ready")
@@ -21,7 +28,6 @@ clientDiscord.on('message', message => {
   if (message.channel.id === channel_id) {
     let input = message.content.split(" ");
     let commande = input[0];
-    console.log(commande);
     switch(commande){
       case ("/vote") :
         let intitule = input.slice(1).join(" ");
@@ -34,7 +40,7 @@ clientDiscord.on('message', message => {
               message.react('✅');
               message.react('❌');
             });
-        break;
+      break;
       case ('/help') :
         clientDiscord.channels.cache.get(channel_id).send("```Commandes du bot :" +
             "\n - " + prefix + "help : Affiche toutes les commandes disponibles" +
@@ -45,10 +51,55 @@ clientDiscord.on('message', message => {
             "\n - " + prefix + "photo : Envoie une photo" +*/
             "\n - " + prefix + "vote + intitulité : Propose un vote" +
             "```");
-        break;
+      break;
+    }
+  }
+  if (message.channel.id === channel_euro_id) {
+    let input = message.content.split(" ");
+    let commande = input[0];
+    switch(commande){
+      case ("/euro") :
+        let match = input.slice(1);
+        let resultat = match[1] + " " + match[2];
+        let date = new Date().toJSON().slice(0,19).replace(/-/g,'/');
+        let dateFormat = date.split('T')[0] + " " + date.split('T')[1];
+
+        const data = {
+          id_player: message.member.id,
+          match: match[0],
+          resultat: resultat,
+          date : dateFormat
+        }
+
+        axiosRestDBConfig.post('/prono', data)
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
+      break;
     }
   }
 });
+
+clientDiscord.on('messageReactionAdd', async (reaction, user) => {
+  if (reaction.message.channel.id === channel_role_id) {
+    if (reaction.partial) {
+      try {
+        await reaction.fetch();
+      } catch (error) {
+        console.error('Fetching message failed: ', error);
+        return;
+      }
+    }
+    if (!user.bot) {
+      //Give Euro Role
+      if (reaction.emoji.id === emoji_euro_id) { //if the user reacted with the right emoji
+        const role = reaction.message.guild.roles.cache.find(r => r.id === role_euro_id); //finds role you want to assign (you could also user .name instead of .id)
+        const {guild} = reaction.message //store the guild of the reaction in variable
+        const member = guild.members.cache.find(member => member.id === user.id); //find the member who reacted (because user and member are seperate things)
+        member.roles.add(role); //assign selected role to member
+      }
+    }
+  }
+})
 
 /*clientDiscord.on('message', message => {
   if (message.channel.id === channel_id) {

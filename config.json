@@ -1,6 +1,10 @@
 {
   "prefix": "/",
-  "channel_id": "806102715930378260",
+  "channel_id": "856851109766758420",
+  "channel_role_id": "856851416701337640",
+  "channel_euro_id": "856134209398767618",
+  "role_euro_id" : "856854886552174592",
+  "emoji_euro_id" : "856854074144981002",
   "startToken": "NjcyOTQxOTc2Mzk5NzczNzM2",
   "midToken": ".XjS0DQ.",
   "endToken": "f4jXhl6pc3rSTXJhHXxv7OQKiUg"
