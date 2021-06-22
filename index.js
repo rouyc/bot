@@ -76,7 +76,7 @@ clientDiscord.on('message', message => {
             .catch(error => console.log(error))
       break;
       case ('/help') :
-        clientDiscord.channels.cache.get(channel_id).send("```Commandes du bot :" +
+        clientDiscord.channels.cache.get(channel_euro_id).send("```Commandes du bot :" +
             "\n - " + prefix + "help : Affiche toutes les commandes disponibles" +
             "\n - " + prefix + "euro : Pour établir un prono sur l'Euro respecter la mise en forme : /euro Equipe1-Equipe2 Equipe1 Victoire" +
             "```");
