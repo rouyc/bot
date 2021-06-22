@@ -40,6 +40,7 @@ clientDiscord.on('message', message => {
               message.react('✅');
               message.react('❌');
             });
+        message.delete();
       break;
       case ('/help') :
         clientDiscord.channels.cache.get(channel_id).send("```Commandes du bot :" +
@@ -51,6 +52,7 @@ clientDiscord.on('message', message => {
             "\n - " + prefix + "photo : Envoie une photo" +*/
             "\n - " + prefix + "vote + intitulité : Propose un vote" +
             "```");
+        message.delete();
       break;
     }
   }
@@ -60,26 +62,30 @@ clientDiscord.on('message', message => {
     switch(commande){
       case ("/euro") :
         let match = input.slice(1);
-        let resultat = match[1] + " " + match[2];
         let date = new Date().toJSON().slice(0,19).replace(/-/g,'/');
         let dateFormat = date.split('T')[0] + " " + date.split('T')[1];
 
         const data = {
-          id_player: message.member.id,
+          id_member: message.member.id,
+          pseudo_member: message.member.displayName,
           match: match[0],
-          resultat: resultat,
+          resultat: match[1],
+          score : match[2],
+          buteur : match[3],
           date : dateFormat
         }
 
         axiosRestDBConfig.post('/prono', data)
             .then(response => console.log(response))
             .catch(error => console.log(error))
+        message.delete();
       break;
       case ('/help') :
         clientDiscord.channels.cache.get(channel_euro_id).send("```Commandes du bot :" +
             "\n - " + prefix + "help : Affiche toutes les commandes disponibles" +
-            "\n - " + prefix + "euro : Pour établir un prono sur l'Euro respecter la mise en forme : /euro Equipe1-Equipe2 Equipe1 Victoire" +
+            "\n - " + prefix + "euro : Pour établir un prono sur l'Euro respecter la mise en forme : /euro France-Belgique France 1-0(Facultatif) Umtiti(Facultatif)" +
             "```");
+        message.delete();
         break;
     }
   }
@@ -97,11 +103,11 @@ clientDiscord.on('messageReactionAdd', async (reaction, user) => {
     }
     if (!user.bot) {
       //Give Euro Role
-      if (reaction.emoji.id === emoji_euro_id) { //if the user reacted with the right emoji
-        const role = reaction.message.guild.roles.cache.find(r => r.id === role_euro_id); //finds role you want to assign (you could also user .name instead of .id)
-        const {guild} = reaction.message //store the guild of the reaction in variable
-        const member = guild.members.cache.find(member => member.id === user.id); //find the member who reacted (because user and member are seperate things)
-        member.roles.add(role); //assign selected role to member
+      if (reaction.emoji.id === emoji_euro_id) { //si le user a réagis avec le bon emoji
+        const role = reaction.message.guild.roles.cache.find(r => r.id === role_euro_id); //chercher le role a ajouter
+        const {guild} = reaction.message //stocke le guild dans une variable
+        const member = guild.members.cache.find(member => member.id === user.id); //cherche le membre a qui on doit ajouter le rôle
+        member.roles.add(role); //assigne le role aux membres
       }
     }
   }
