@@ -154,8 +154,6 @@ clientDiscord.on('messageReactionAdd', async (reaction, user) => {
                 role = reaction.message.guild.roles.cache.find(r => r.id === role_bot_id);
                 member.roles.add(role);
                 break;
-            default:
-                reaction.remove();
         }
     }
 });
@@ -174,8 +172,6 @@ clientDiscord.on('messageReactionRemove', async (reaction, user) => {
                 role = reaction.message.guild.roles.cache.find(r => r.id === role_bot_id);
                 member.roles.remove(role);
                 break;
-            default:
-                reaction.remove();
         }
     }
 });
