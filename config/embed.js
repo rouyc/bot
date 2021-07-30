@@ -4,7 +4,7 @@ const color = "#0099ff";
 
 let {
     prefix
-} = require("./config/config.json");
+} = require("./config.json");
 
 let embedBotHelp = new Discord.MessageEmbed()
     .setColor(color)
@@ -12,14 +12,6 @@ let embedBotHelp = new Discord.MessageEmbed()
     .setThumbnail(imgServ)
     .setDescription("\n" + prefix + "help : Affiche toutes les commandes disponibles" +
         "\n" + prefix + "vote + intitulité : Propose un vote")
-
-let embedEuroHelp = new Discord.MessageEmbed()
-    .setColor(color)
-    .setTitle("Commandes du bot")
-    .setThumbnail(imgServ)
-    .setDescription("\n" + prefix + "help : Affiche toutes les commandes disponibles" +
-        "\n" + prefix + "euro-bet : Pour établir un prono sur l'Euro respecter la mise en forme : /euro-bet France-Belgique France 1-0(Facultatif) Umtiti(Facultatif)" +
-        "\n" + prefix + "euro-view-my-bet : Pour voir ses pronos")
 
 let embedRole = new Discord.MessageEmbed()
     .setColor(color)
@@ -29,8 +21,32 @@ let embedRole = new Discord.MessageEmbed()
         "\n <a:bot:857310806513418250> : Pour obtenir le rôle Bot et accéder au reste du serveur" +
         "\n <:euro2020:856854074144981002> : Pour obtenir le rôle Euro et faires des pronos sur l'Euro 2020")
 
+let embedEuroHelp = new Discord.MessageEmbed()
+    .setColor(color)
+    .setTitle("Commandes du bot")
+    .setThumbnail(imgServ)
+    .setDescription("\n" + prefix + "help : Affiche toutes les commandes disponibles" +
+        "\n" + prefix + "euro-bet : Pour établir un prono sur l'Euro respecter la mise en forme : /euro-bet France-Belgique France 1-0(Facultatif) Umtiti(Facultatif)" +
+        "\n" + prefix + "euro-view-my-bet : Pour voir ses pronos")
+
+function embedVote(a) {
+    return new Discord.MessageEmbed()
+        .setColor(color)
+        .setTitle(a)
+        .setDescription("Répondre avec :white_check_mark: ou :x:")
+}
+
+function embedLog(a, b) {
+    return new Discord.MessageEmbed()
+        .setColor(color)
+        .setTitle(a)
+        .setDescription(b);
+}
+
 module.exports = {
     embedBotHelp: embedBotHelp,
+    embedRole: embedRole,
     embedEuroHelp: embedEuroHelp,
-    embedRole: embedRole
+    embedVote: embedVote,
+    embedLog: embedLog
 }

@@ -11,6 +11,7 @@ let {
 
 let {
     channel_bot_id,
+    channel_log_id,
     channel_role_id,
     channel_euro_id
 } = require("./config/channel_id.json");
@@ -25,7 +26,7 @@ let {
     emoji_euro_id
 } = require("./config/emoji_id.json");
 
-const embed = require('./embed.js')
+let embed = require('./config/embed.js')
 
 let token = startToken + midToken + endToken;
 
@@ -41,55 +42,61 @@ let restDBConfig = {
 }
 let axiosRestDBConfig = axios.create(restDBConfig)
 
-clientDiscord.on("ready", () => {
-    console.log("Ready")
+clientDiscord.on("ready", ready => {
+
     clientDiscord.user.setPresence({
         status: "online",
         activity: {
-            name: "/help pour plus d'info",
+            name: "/help pour dans #bot plus d'infos",
             type: "PLAYING"
         }
     });
 
-    clientDiscord.channels.cache.get(channel_role_id).send(embed.embedRole)
-        .then(function (message) {
-            message.react(emoji_bot_id);
-            message.react(emoji_euro_id);
-        });
+    let date = new Date().toJSON().slice(0, 19).replace(/-/g, '/');
+    let dateFormat = date.split('T')[1] + " " + date.split('T')[0];
 
-    clientDiscord.channels.cache.get(channel_bot_id).send(embed.embedBotHelp);
-
-    clientDiscord.channels.cache.get(channel_euro_id).send(embed.embedEuroHelp);
-
+    clientDiscord.channels.cache.get(channel_log_id).send(embed.embedLog("Start",dateFormat));
 })
 
 clientDiscord.on('message', message => {
+    let input = message.content.split(" ");
+    let commande = input[0];
+
+    if (message.channel.id === channel_log_id) {
+        switch (commande) {
+            case (prefix + "setup") :
+                clientDiscord.channels.cache.get(channel_role_id).send(embed.embedRole)
+                    .then(function (message) {
+                        message.react(emoji_bot_id);
+                        message.react(emoji_euro_id);
+                    });
+                clientDiscord.channels.cache.get(channel_bot_id).send(embed.embedBotHelp);
+                clientDiscord.channels.cache.get(channel_euro_id).send(embed.embedEuroHelp);
+                message.delete();
+
+                clientDiscord.channels.cache.get(channel_log_id).send(embed.embedLog("Setup","Setup"));
+                break;
+        }
+    }
     if (message.channel.id === channel_bot_id) {
-        let input = message.content.split(" ");
-        let commande = input[0];
         switch (commande) {
             case (prefix + "vote") :
                 let intitule = input.slice(1).join(" ");
-                let embed = new Discord.MessageEmbed()
-                    .addField(intitule, "Répondre avec :white_check_mark: ou :x:")
-                    .setColor("#0099ff")
-                    .setTimestamp();
-                clientDiscord.channels.cache.get(channel_bot_id).send(embed)
+                clientDiscord.channels.cache.get(channel_bot_id).send(embed.embedVote(intitule))
                     .then(function (message) {
                         message.react('✅');
                         message.react('❌');
                     });
                 message.delete();
                 break;
+
             case (prefix + "help") :
-                clientDiscord.channels.cache.get(channel_bot_id).send(embedBotHelp);
+                clientDiscord.channels.cache.get(channel_euro_id).send(embed.embedBotHelp);
                 message.delete();
                 break;
         }
     }
     if (message.channel.id === channel_euro_id) {
-        let input = message.content.split(" ");
-        let commande = input[0];
         switch (commande) {
             case (prefix + "euro-bet") :
                 let match = input.slice(1);
@@ -132,8 +139,9 @@ clientDiscord.on('message', message => {
                     .catch(error => console.log(error))
                 message.delete();
                 break;
+
             case (prefix + "help") :
-                clientDiscord.channels.cache.get(channel_euro_id).send(embedEuroHelp);
+                clientDiscord.channels.cache.get(channel_euro_id).send(embed.embedEuroHelp);
                 message.delete();
                 break;
         }
@@ -149,10 +157,14 @@ clientDiscord.on('messageReactionAdd', async (reaction, user) => {
             case (emoji_euro_id) :
                 role = reaction.message.guild.roles.cache.find(r => r.id === role_euro_id);
                 member.roles.add(role);
+
+                clientDiscord.channels.cache.get(channel_log_id).send(embed.embedLog("Reaction Add Euro",member));
                 break;
             case (emoji_bot_id) :
                 role = reaction.message.guild.roles.cache.find(r => r.id === role_bot_id);
                 member.roles.add(role);
+
+                clientDiscord.channels.cache.get(channel_log_id).send(embed.embedLog("Reaction Add Bot",member));
                 break;
         }
     }
@@ -167,13 +179,18 @@ clientDiscord.on('messageReactionRemove', async (reaction, user) => {
             case (emoji_euro_id) :
                 role = reaction.message.guild.roles.cache.find(r => r.id === role_euro_id);
                 member.roles.remove(role);
+
+                clientDiscord.channels.cache.get(channel_log_id).send(embed.embedLog("Reaction Remove Euro",member));
                 break;
             case (emoji_bot_id) :
                 role = reaction.message.guild.roles.cache.find(r => r.id === role_bot_id);
                 member.roles.remove(role);
+
+                clientDiscord.channels.cache.get(channel_log_id).send(embed.embedLog("Reaction Remove Bot",member));
                 break;
         }
     }
 });
 
 clientDiscord.login(token);
+
