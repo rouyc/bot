@@ -35,6 +35,7 @@ let embedMusiqueHelp = new Discord.MessageEmbed()
     .setTitle("Commandes du bot")
     .setThumbnail(imgServ)
     .setDescription("\n" + prefix + "play : Pour lancer une musique respecter la mise en forme : /play LienYoutube" +
+        "\n" + prefix + "search : Pour lancer une musique respecter la mise en forme : /search Nom de la musique" +
         "\n" + prefix + "skip : Pour avancer dans la liste de lecture" +
         "\n" + prefix + "stop : Pour couper la musique")
 
