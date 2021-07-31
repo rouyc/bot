@@ -19,7 +19,8 @@ let embedRole = new Discord.MessageEmbed()
     .setThumbnail(imgServ)
     .setDescription("Avant d'accéder aux salons, je t'invite à réagir à ce message pour avoir un rôle" +
         "\n <a:bot:857310806513418250> : Pour obtenir le rôle Bot et accéder au reste du serveur" +
-        "\n <:euro2020:856854074144981002> : Pour obtenir le rôle Euro et faires des pronos sur l'Euro 2020")
+        "\n <:euro2020:856854074144981002> : Pour obtenir le rôle Euro et faires des pronos sur l'Euro 2020" +
+        "\n <:musique:870977864667922453> : Pour obtenir le rôle Musique et jouer de la musique dans les salons vocaux")
 
 let embedEuroHelp = new Discord.MessageEmbed()
     .setColor(color)
