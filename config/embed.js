@@ -30,6 +30,14 @@ let embedEuroHelp = new Discord.MessageEmbed()
         "\n" + prefix + "euro-bet : Pour établir un prono sur l'Euro respecter la mise en forme : /euro-bet France-Belgique France 1-0(Facultatif) Umtiti(Facultatif)" +
         "\n" + prefix + "euro-view-my-bet : Pour voir ses pronos")
 
+let embedMusiqueHelp = new Discord.MessageEmbed()
+    .setColor(color)
+    .setTitle("Commandes du bot")
+    .setThumbnail(imgServ)
+    .setDescription("\n" + prefix + "play : Pour lancer une musique respecter la mise en forme : /play LienYoutube" +
+        "\n" + prefix + "skip : Pour avancer dans la liste de lecture" +
+        "\n" + prefix + "stop : Pour couper la musique")
+
 function embedVote(a) {
     return new Discord.MessageEmbed()
         .setColor(color)
@@ -48,6 +56,7 @@ module.exports = {
     embedBotHelp: embedBotHelp,
     embedRole: embedRole,
     embedEuroHelp: embedEuroHelp,
+    embedMusiqueHelp: embedMusiqueHelp,
     embedVote: embedVote,
     embedLog: embedLog
 }

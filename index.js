@@ -64,6 +64,7 @@ clientDiscord.on('message', message => {
                     });
                 clientDiscord.channels.cache.get(channelId.channel_bot_id).send(embed.embedBotHelp);
                 clientDiscord.channels.cache.get(channelId.channel_euro_id).send(embed.embedEuroHelp);
+                clientDiscord.channels.cache.get(channelId.channel_musique_id).send(embed.embedMusiqueHelp);
                 message.delete();
 
                 clientDiscord.channels.cache.get(channelId.channel_log_id).send(embed.embedLog("Setup", "Setup"));
@@ -167,6 +168,10 @@ clientDiscord.on('message', message => {
         }
 
         switch (commande) {
+            case (prefix + "help") :
+                clientDiscord.channels.cache.get(channelId.channel_musique_id).send(embed.embedMusiqueHelp);
+                message.delete();
+                break;
             case (prefix + "play") :
                 musique.execute(message);
                 break;
