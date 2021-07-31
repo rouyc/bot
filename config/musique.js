@@ -1,9 +1,8 @@
 const ytdl = require('ytdl-core');
 const queue = new Map();
 
-async function execute(message) {
+async function execute(message,lien) {
     const serverQueue = queue.get(message.guild.id);
-    const args = message.content.split(" ");
 
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel)
@@ -15,7 +14,7 @@ async function execute(message) {
         return message.channel.send("J'ai besoin des permissions pour rejoindre le salon et pour y jouer de la musique!");
     }
 
-    const songInfo = await ytdl.getInfo(args[1]);
+    const songInfo = await ytdl.getInfo(lien);
     const song = {
         title: songInfo.videoDetails.title,
         url: songInfo.videoDetails.video_url,
@@ -47,9 +46,7 @@ async function execute(message) {
         console.log(serverQueue.songs);
         return message.channel.send(`${song.title} a était ajouter a la liste de lecture !`);
     }
-
 }
-
 function play(guild, song) {
     console.log(song);
     const serverQueue = queue.get(guild.id);
@@ -66,7 +63,7 @@ function play(guild, song) {
             play(guild, serverQueue.songs[0]);
         })
         .on("error", error => console.error(error));
-    dispatcher.setVolume(0.5);
+    dispatcher.setVolume(0.01);
     serverQueue.textChannel.send(`Démarrage de la musique: **${song.title}**`);
 }
 

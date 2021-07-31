@@ -16,6 +16,8 @@ let emojiId = require("./config/emoji_id.js");
 let embed = require('./config/embed.js');
 let musique = require("./config/musique");
 
+let usetube = require('usetube');
+
 let token = startToken + midToken + endToken;
 
 let clientDiscord = new Discord.Client({partials: ['MESSAGE', 'CHANNEL', 'REACTION']});
@@ -39,6 +41,9 @@ clientDiscord.on("ready", ready => {
             type: "PLAYING"
         }
     });
+
+    const usetube = require('usetube');
+    usetube.searchVideo("discord").then(tube => console.log(tube.videos[0].id));
 
     let date = new Date().toJSON().slice(0, 19).replace(/-/g, '/');
     let dateFormat = date.split('T')[1] + " " + date.split('T')[0];
@@ -173,7 +178,12 @@ clientDiscord.on('message', message => {
                 message.delete();
                 break;
             case (prefix + "play") :
-                musique.execute(message);
+                let lien = message.content.split(" ");
+                musique.execute(message,lien[1]);
+                break;
+            case (prefix + "search") :
+                usetube.searchVideo(message.content.slice(8))
+                    .then(tube => musique.execute(message,"https://www.youtube.com/watch?v=" + tube.videos[0].id));
                 break;
             case (prefix + "skip") :
                 musique.skip(message);
@@ -195,7 +205,7 @@ clientDiscord.on('messageReactionAdd', async (reaction, user) => {
                 role = reaction.message.guild.roles.cache.find(r => r.id === roleId.role_euro_id);
                 member.roles.add(role);
 
-                clientDiscord.channels.cache.get(channelId.channel_log_id).send(embed.embedLog("Ajout role Euro" , member));
+                clientDiscord.channels.cache.get(channelId.channel_log_id).send(embed.embedLog("Ajout role Euro", member));
                 break;
             case (emojiId.emoji_bot_id) :
                 role = reaction.message.guild.roles.cache.find(r => r.id === roleId.role_bot_id);
