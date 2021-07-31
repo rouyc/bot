@@ -55,7 +55,7 @@ clientDiscord.on('message', message => {
             return;
         }
         switch (commande) {
-            case (prefix + "setupp") :
+            case (prefix + "setup") :
                 clientDiscord.channels.cache.get(channelId.channel_role_id).send(embed.embedRole)
                     .then(function (message) {
                         message.react(emojiId.emoji_bot_id);
