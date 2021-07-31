@@ -11,7 +11,7 @@ let embedBotHelp = new Discord.MessageEmbed()
     .setTitle("Commandes du bot")
     .setThumbnail(imgServ)
     .setDescription("\n" + prefix + "help : Affiche toutes les commandes disponibles" +
-        "\n" + prefix + "vote + intitulité : Propose un vote")
+        "\n**" + prefix + "vote Intitulité** : Propose un vote")
 
 let embedRole = new Discord.MessageEmbed()
     .setColor(color)
@@ -27,17 +27,17 @@ let embedEuroHelp = new Discord.MessageEmbed()
     .setTitle("Commandes du bot")
     .setThumbnail(imgServ)
     .setDescription("\n" + prefix + "help : Affiche toutes les commandes disponibles" +
-        "\n" + prefix + "euro-bet : Pour établir un prono sur l'Euro respecter la mise en forme : /euro-bet France-Belgique France 1-0(Facultatif) Umtiti(Facultatif)" +
-        "\n" + prefix + "euro-view-my-bet : Pour voir ses pronos")
+        "\n**" + prefix + "euro-bet Prono** : Pour établir un prono sur l'Euro respecter la mise en forme : /euro-bet France-Belgique France 1-0(Facultatif) Umtiti(Facultatif)" +
+        "\n**" + prefix + "euro-view-my-bet** : Pour voir ses pronos")
 
 let embedMusiqueHelp = new Discord.MessageEmbed()
     .setColor(color)
     .setTitle("Commandes du bot")
     .setThumbnail(imgServ)
-    .setDescription("\n" + prefix + "play : Pour lancer une musique respecter la mise en forme : /play LienYoutube" +
-        "\n" + prefix + "search : Pour lancer une musique respecter la mise en forme : /search Nom de la musique" +
-        "\n" + prefix + "skip : Pour avancer dans la liste de lecture" +
-        "\n" + prefix + "stop : Pour couper la musique")
+    .setDescription("\n" + prefix + "play Musique** : Pour lancer une musique respecter la mise en forme : /play LienYoutube" +
+        "\n**" + prefix + "search Musique** : Pour lancer une musique respecter la mise en forme : /search Nom de la musique" +
+        "\n**" + prefix + "skip** : Pour avancer dans la liste de lecture" +
+        "\n**" + prefix + "stop** : Pour couper la musique")
 
 function embedVote(a) {
     return new Discord.MessageEmbed()
