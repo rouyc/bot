@@ -32,7 +32,7 @@ let restDBConfig = {
 }
 let axiosRestDBConfig = axios.create(restDBConfig)
 
-clientDiscord.on("ready", ready => {
+clientDiscord.on("ready", () => {
 
     clientDiscord.user.setPresence({
         status: "online",
@@ -41,9 +41,6 @@ clientDiscord.on("ready", ready => {
             type: "PLAYING"
         }
     });
-
-    const usetube = require('usetube');
-    usetube.searchVideo("discord").then(tube => console.log(tube.videos[0].id));
 
     let date = new Date().toJSON().slice(0, 19).replace(/-/g, '/');
     let dateFormat = date.split('T')[1] + " " + date.split('T')[0];
@@ -56,7 +53,11 @@ clientDiscord.on('message', message => {
     let commande = input[0];
 
     if (message.channel.id === channelId.channel_log_id) {
-        if (message.author.bot) {
+        if (!message.content.startsWith(prefix)) {
+            if (!message.author.bot) {
+                message.delete();
+                return;
+            }
             return;
         }
         switch (commande) {
@@ -66,10 +67,12 @@ clientDiscord.on('message', message => {
                         message.react(emojiId.emoji_bot_id);
                         message.react(emojiId.emoji_euro_id);
                         message.react(emojiId.emoji_musique_id);
+                        message.react(emojiId.emoji_valorant_id);
                     });
                 clientDiscord.channels.cache.get(channelId.channel_bot_id).send(embed.embedBotHelp);
                 clientDiscord.channels.cache.get(channelId.channel_euro_id).send(embed.embedEuroHelp);
                 clientDiscord.channels.cache.get(channelId.channel_musique_id).send(embed.embedMusiqueHelp);
+                clientDiscord.channels.cache.get(channelId.channel_valorant_id).send(embed.embedValorantHelp);
                 message.delete();
 
                 clientDiscord.channels.cache.get(channelId.channel_log_id).send(embed.embedLog("Setup", "Setup"));
@@ -77,6 +80,7 @@ clientDiscord.on('message', message => {
         }
     }
 
+    //Bot
     if (message.channel.id === channelId.channel_bot_id) {
         if (!message.content.startsWith(prefix)) {
             if (!message.author.bot) {
@@ -104,6 +108,7 @@ clientDiscord.on('message', message => {
         }
     }
 
+    //Euro
     if (message.channel.id === channelId.channel_euro_id) {
         if (!message.content.startsWith(prefix)) {
             if (!message.author.bot) {
@@ -163,6 +168,7 @@ clientDiscord.on('message', message => {
         }
     }
 
+    //Musique
     if (message.channel.id === channelId.channel_musique_id) {
         if (!message.content.startsWith(prefix)) {
             if (!message.author.bot) {
@@ -179,17 +185,93 @@ clientDiscord.on('message', message => {
                 break;
             case (prefix + "play") :
                 let lien = message.content.split(" ");
-                musique.execute(message,lien[1]);
+                musique.execute(message, lien[1]);
                 break;
             case (prefix + "search") :
                 usetube.searchVideo(message.content.slice(8))
-                    .then(tube => musique.execute(message,"https://www.youtube.com/watch?v=" + tube.videos[0].id));
+                    .then(tube => musique.execute(message, "https://www.youtube.com/watch?v=" + tube.videos[0].id));
                 break;
             case (prefix + "skip") :
                 musique.skip(message);
                 break;
             case (prefix + "stop") :
                 musique.stop(message);
+                break;
+        }
+    }
+
+    //Valorant
+    if (message.channel.id === channelId.channel_valorant_id) {
+        if (!message.content.startsWith(prefix)) {
+            if (!message.author.bot) {
+                message.delete();
+                return;
+            }
+            return;
+        }
+
+        switch (commande) {
+            case (prefix + "help") :
+                clientDiscord.channels.cache.get(channelId.channel_valorant_id).send(embed.embedValorantHelp);
+                break;
+            case (prefix + "create") :
+                let data = {
+                    member_id: message.member.id,
+                    member_name: message.member.displayName,
+                    elo: 0,
+                    match: 0
+                }
+                axiosRestDBConfig.post('/valorant', data)
+                    .then(response => console.log(response))
+                    .catch(error => console.log(error))
+                message.delete();
+                break;
+            case (prefix + "maj") :
+                let score = input.slice(1);
+                axiosRestDBConfig.get('/valorant?q={"member_id":"' + message.member.id + '"}')
+                    .then(response => {
+                            let data = {
+                                elo: response.data[0].elo + ((parseInt(score[0])*2) - parseInt(score[1]) + parseInt(score[2])),
+                                match: response.data[0].match + 1,
+                            }
+                            console.log(response)
+                            axiosRestDBConfig.put('/valorant/' + response.data[0]._id, data)
+                                    .then(response => console.log(response))
+                                    .catch(error => console.log(error))
+                            console.log(data)
+                        }
+                    )
+                    .catch(error => console.log(error))
+                message.delete();
+                break;
+            case (prefix + "ranking") :
+                let table = "**Pseudo | Elo | Match Jouer**\n";
+                axiosRestDBConfig.get('/valorant')
+                    .then(response => {
+                        response.data.forEach(function (result) {
+                            table += result.member_name + " | " + result.elo + " | " + result.match + " | " + result.elo/result.match + "\n";
+                        })
+                        clientDiscord.channels.cache.get(channelId.channel_valorant_id).send(embed.embedValorantRanking(table))
+                    })
+                    .catch(error => console.log(error))
+                message.delete();
+                break;
+            case (prefix + "reset") :
+                axiosRestDBConfig.get('/valorant?q={"member_id":"' + message.member.id + '"}')
+                    .then(response => {
+                            let data = {
+                                elo: 0,
+                                match: 0,
+                            }
+                            console.log(response)
+                            axiosRestDBConfig.put('/valorant/' + response.data[0]._id, data)
+                                .then(response => console.log(response))
+                                .catch(error => console.log(error))
+                            console.log(data)
+                        }
+                    )
+                    .catch(error => console.log(error))
+                message.delete();
                 break;
         }
     }
@@ -220,6 +302,13 @@ clientDiscord.on('messageReactionAdd', async (reaction, user) => {
 
                 clientDiscord.channels.cache.get(channelId.channel_log_id).send(embed.embedLog("Ajout role Musique", member));
                 break;
+
+            case (emojiId.emoji_valorant_id) :
+                role = reaction.message.guild.roles.cache.find(r => r.id === roleId.role_valorant_id);
+                member.roles.add(role);
+
+                clientDiscord.channels.cache.get(channelId.channel_log_id).send(embed.embedLog("Ajout role Valorant", member));
+                break;
         }
     }
 });
@@ -248,6 +337,13 @@ clientDiscord.on('messageReactionRemove', async (reaction, user) => {
                 member.roles.remove(role);
 
                 clientDiscord.channels.cache.get(channelId.channel_log_id).send(embed.embedLog("Ajout role Musique", member));
+                break;
+
+            case (emojiId.emoji_valorant_id) :
+                role = reaction.message.guild.roles.cache.find(r => r.id === roleId.role_valorant_id);
+                member.roles.remove(role);
+
+                clientDiscord.channels.cache.get(channelId.channel_log_id).send(embed.embedLog("Ajout role Valorant", member));
                 break;
         }
     }

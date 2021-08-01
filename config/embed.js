@@ -20,7 +20,8 @@ let embedRole = new Discord.MessageEmbed()
     .setDescription("Avant d'accéder aux salons, je t'invite à réagir à ce message pour avoir un rôle" +
         "\n <a:bot:857310806513418250> : Pour obtenir le rôle Bot et accéder au reste du serveur" +
         "\n <:euro2020:856854074144981002> : Pour obtenir le rôle Euro et faire des pronos sur l'Euro 2020" +
-        "\n <:musique:870977864667922453> : Pour obtenir le rôle Musique et jouer de la musique dans les salons vocaux")
+        "\n <:musique:870977864667922453> : Pour obtenir le rôle Musique et jouer de la musique dans les salons vocaux" +
+        "\n <:valorant:871171679680884788> : Pour obtenir le rôle Valorant et participer au ranking")
 
 let embedEuroHelp = new Discord.MessageEmbed()
     .setColor(color)
@@ -38,6 +39,22 @@ let embedMusiqueHelp = new Discord.MessageEmbed()
         "\n**" + prefix + "search Musique** : Pour lancer une musique respecter la mise en forme : /search Nom de la musique" +
         "\n**" + prefix + "skip** : Pour avancer dans la liste de lecture" +
         "\n**" + prefix + "stop** : Pour couper la musique")
+
+let embedValorantHelp = new Discord.MessageEmbed()
+    .setColor(color)
+    .setTitle("Commandes du bot")
+    .setThumbnail(imgServ)
+    .setDescription("\n**" + prefix + "create** : Pour créer son profil dans le classement" +
+        "\n**" + prefix + "maj Score** : Pour mettre a jour son elo : /maj Kills Mort Assists" +
+        "\n**" + prefix + "reset** : Pour réinitialiser son classement" +
+        "\n**" + prefix + "ranking** : Pour afficher le classement")
+
+function embedValorantRanking(a) {
+    return new Discord.MessageEmbed()
+        .setColor(color)
+        .setTitle("Ranking Valorant")
+        .setDescription(a)
+}
 
 function embedVote(a) {
     return new Discord.MessageEmbed()
@@ -58,6 +75,8 @@ module.exports = {
     embedRole: embedRole,
     embedEuroHelp: embedEuroHelp,
     embedMusiqueHelp: embedMusiqueHelp,
+    embedValorantHelp: embedValorantHelp,
+    embedValorantRanking: embedValorantRanking,
     embedVote: embedVote,
     embedLog: embedLog
 }
