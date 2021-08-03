@@ -61,6 +61,7 @@ clientDiscord.on('message', message => {
                         message.react(emojiId.emoji_euro_id);
                         message.react(emojiId.emoji_musique_id);
                         message.react(emojiId.emoji_valorant_id);
+                        message.react(emojiId.emoji_tickets_id);
                     });
                 clientDiscord.channels.cache.get(channelId.channel_bot_id).send(embed.embedBotHelp);
                 clientDiscord.channels.cache.get(channelId.channel_euro_id).send(embed.embedEuroHelp);
@@ -143,8 +144,6 @@ clientDiscord.on('message', message => {
                 clientDiscord.channels.cache.get(channelId.channel_euro_id).send(embed.embedEuroHelp);
                 message.delete();
                 break;
-            default :
-                message.delete();
         }
     }
 
@@ -169,8 +168,6 @@ clientDiscord.on('message', message => {
             case (prefix + "stop") :
                 musique.stop(message);
                 break;
-            default :
-                message.delete();
         }
     }
 
@@ -238,8 +235,6 @@ clientDiscord.on('message', message => {
                     .catch(error => console.log(error))
                 message.delete();
                 break;
-            default :
-                message.delete();
         }
     }
 
@@ -260,8 +255,6 @@ clientDiscord.on('message', message => {
                     .then(channel => clientDiscord.channels.cache.get(channel.id).send(intitule));
                 message.delete();
                 break;
-            default :
-                message.delete();
         }
     }
 });
