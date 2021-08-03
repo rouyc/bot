@@ -49,6 +49,12 @@ let embedValorantHelp = new Discord.MessageEmbed()
         "\n**" + prefix + "reset** : Pour réinitialiser son classement" +
         "\n**" + prefix + "ranking** : Pour afficher le classement")
 
+let embedTicketsHelp = new Discord.MessageEmbed()
+    .setColor(color)
+    .setTitle("Commandes du bot pour la rédaction d'un tickets")
+    .setThumbnail(imgServ)
+    .setDescription("\n**" + prefix + "tikets Message ** : Pour créer un nouveau tickets")
+
 function embedValorantRanking(a) {
     return new Discord.MessageEmbed()
         .setColor(color)
@@ -76,6 +82,7 @@ module.exports = {
     embedEuroHelp: embedEuroHelp,
     embedMusiqueHelp: embedMusiqueHelp,
     embedValorantHelp: embedValorantHelp,
+    embedTicketsHelp: embedTicketsHelp,
     embedValorantRanking: embedValorantRanking,
     embedVote: embedVote,
     embedLog: embedLog

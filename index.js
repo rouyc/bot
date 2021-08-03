@@ -66,6 +66,7 @@ clientDiscord.on('message', message => {
                 clientDiscord.channels.cache.get(channelId.channel_euro_id).send(embed.embedEuroHelp);
                 clientDiscord.channels.cache.get(channelId.channel_musique_id).send(embed.embedMusiqueHelp);
                 clientDiscord.channels.cache.get(channelId.channel_valorant_id).send(embed.embedValorantHelp);
+                clientDiscord.channels.cache.get(channelId.channel_tickets_id).send(embed.embedTicketsHelp);
                 message.delete();
 
                 clientDiscord.channels.cache.get(channelId.channel_log_id).send(embed.embedLog("Setup", "Setup"));
