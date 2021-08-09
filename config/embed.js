@@ -53,7 +53,7 @@ let embedTicketsHelp = new Discord.MessageEmbed()
     .setColor(color)
     .setTitle("Commandes du bot pour la rédaction d'un tickets")
     .setThumbnail(imgServ)
-    .setDescription("\n**" + prefix + "tikets Message ** : Pour créer un nouveau tickets")
+    .setDescription("\n**" + prefix + "tickets Message ** : Pour créer un nouveau tickets")
 
 function embedValorantRanking(a) {
     return new Discord.MessageEmbed()
